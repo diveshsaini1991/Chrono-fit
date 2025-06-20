@@ -34,8 +34,6 @@ public class KeycloakUserSyncFilter implements WebFilter {
             return userService.validateUser(userId)
                     .flatMap(exist -> {
                         if (!exist) {
-                            // Register User
-
                             if (registerRequest != null) {
                                 return userService.registerUser(registerRequest)
                                         .then(Mono.empty());
