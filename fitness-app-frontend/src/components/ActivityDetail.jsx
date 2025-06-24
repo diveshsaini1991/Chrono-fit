@@ -51,33 +51,64 @@ const ActivityDetail = () => {
             {recommendation && (
                 <Card>
                     <CardContent>
-                        <Typography variant="h5" gutterBottom>AI Recommendation</Typography>
-                        <Typography variant="h6">Analysis</Typography>
-                        <Typography paragraph>{activity.recommendation}</Typography>
-                        
-                        <Divider sx={{ my: 2 }} />
-                        
+                    <Typography variant="h5" gutterBottom>AI Recommendation</Typography>
+
+                    {activity.recommendation.split('\n').map((section, index) => {
+                        const [title, ...content] = section.split(':');
+                        return (
+                        <Box key={index} sx={{ mb: 2 }}>
+                            <Typography variant="subtitle1" fontWeight="bold">
+                            {title.trim()}
+                            </Typography>
+                            <Typography variant="body2">
+                            {content.join(':').trim()}
+                            </Typography>
+                        </Box>
+                        );
+                    })}
+
+                    <Divider sx={{ my: 2 }} />
+
+                    {activity?.improvements?.length > 0 && (
+                        <Box sx={{ mb: 2 }}>
                         <Typography variant="h6">Improvements</Typography>
-                        {activity?.improvements?.map((improvement, index) => (
-                            <Typography key={index} paragraph>• {improvement}</Typography>
+                        {activity.improvements.map((improvement, index) => (
+                            <Typography key={index} variant="body2" paragraph>
+                            • {improvement}
+                            </Typography>
                         ))}
-                        
+                        </Box>
+                    )}
+
+                    {activity?.suggestions?.length > 0 && (
+                        <>
                         <Divider sx={{ my: 2 }} />
-                        
-                        <Typography variant="h6">Suggestions</Typography>
-                        {activity?.suggestions?.map((suggestion, index) => (
-                            <Typography key={index} paragraph>• {suggestion}</Typography>
-                        ))}
-                        
+                        <Box sx={{ mb: 2 }}>
+                            <Typography variant="h6">Suggestions</Typography>
+                            {activity.suggestions.map((suggestion, index) => (
+                            <Typography key={index} variant="body2" paragraph>
+                                • {suggestion}
+                            </Typography>
+                            ))}
+                        </Box>
+                        </>
+                    )}
+
+                    {activity?.safety?.length > 0 && (
+                        <>
                         <Divider sx={{ my: 2 }} />
-                        
                         <Typography variant="h6">Safety Guidelines</Typography>
-                        {activity?.safety?.map((safety, index) => (
-                            <Typography key={index} paragraph>• {safety}</Typography>
+                        {activity.safety.map((safety, index) => (
+                            <Typography key={index} variant="body2" paragraph>
+                            • {safety}
+                            </Typography>
                         ))}
+                        </>
+                    )}
                     </CardContent>
                 </Card>
-            )}
+                )}
+
         </Box>
   )
 }
