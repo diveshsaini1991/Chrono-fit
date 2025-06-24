@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import { getActivityDetail } from '../services/api';
+import { getActivity, getActivityDetail } from '../services/api';
 import { Box, Card, CardContent, Divider, Typography } from '@mui/material';
 
 const ActivityDetail = () => {
@@ -11,23 +11,33 @@ const ActivityDetail = () => {
     useEffect(()=>{
         const fetchActivityDetail = async()=>{
             try{
-                const response = await getActivityDetail(id);
+                let response = await getActivityDetail(id);
                 setActivity(response.data);
                 setRecommendation(response.data.recommendation); 
+                response = await getActivity(response.data.activityId);
+                setActivity(prev => ({
+                    ...prev,
+                    duration : response.data.duration,
+                    caloriesBurned : response.data.caloriesBurned
+                }));
             }catch(error){
                 console.error(error);
             }
         }
-
-
         fetchActivityDetail();
     },[id])
+
+    // const debug = ()=>{
+    //     console.log(activity);
+    //     console.log(recommendation);
+    // };
 
     if(!activity){
         return <Typography>Loading...</Typography>
     }
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }}>
+        {/* <button onClick={debug}>debug</button> */}
             <Card sx={{ mb: 2 }}>
                 <CardContent>
                     <Typography variant="h5" gutterBottom>Activity Details</Typography>
